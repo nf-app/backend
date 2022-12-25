@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${NF_DB_HOST:localhost}:${NF_DB_PORT:15432}/${NF_DB_NAME:news_feed}
+    username: ${NF_DB_USER:news_feed}
+    password: ${NF_DB_PASSWORD:657hyrtgsd}
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${NF_DB_MAX_POOL_SIZE:8}
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+kafka:
+  order-topic: ${NF_ODRED_TOPIC:order-topic}
+  bootstrap-servers: ${NF_KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
