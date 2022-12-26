@@ -8,10 +8,8 @@
         <artifactId>news-feed</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <packaging>pom</packaging>
-    <artifactId>harvesters</artifactId>
-    <name>Harvesters</name>
-    <description>News Feed app Harvesters</description>
+
+    <artifactId>commons</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
