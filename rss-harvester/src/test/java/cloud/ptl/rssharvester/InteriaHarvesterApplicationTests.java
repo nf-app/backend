@@ -1,4 +1,4 @@
-package cloud.ptl.interiaharvester;
+package cloud.ptl.rssharvester;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,21 +1,26 @@
 package cloud.ptl.api.config;
 
+import cloud.ptl.kafka.message.HarvestRequestMessage;
+import cloud.ptl.kafka.serde.HarvestRequestMessageSerde;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 public class KafkaConfiguration {
-
     @Value(value = "${kafka.bootstrap-servers}")
     private String bootstrapAddress;
-
     @Value("${kafka.order-topic}")
     private String orderTopic;
 
@@ -29,5 +34,25 @@ public class KafkaConfiguration {
     @Bean
     public NewTopic topic1() {
         return new NewTopic(orderTopic, 1, (short) 1);
+    }
+
+    @Bean("harvest-order-producer-factory")
+    public ProducerFactory<String, HarvestRequestMessage> producerFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        configProps.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        configProps.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                HarvestRequestMessageSerde.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean("harvest-order-template")
+    public KafkaTemplate<String, HarvestRequestMessage> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
     }
 }
